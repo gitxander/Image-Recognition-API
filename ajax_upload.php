@@ -107,8 +107,8 @@
 				
 				if (ftp_put($this->conn_id, $this->destination, $this->source, FTP_BINARY)) {
 					$data = array(
-						'message' 	=> 'Successfully uploaded',
-						'status' 	=> 'completed'
+						'message' => 'Successfully uploaded',
+						'status' => 'completed'
 					);
 
 					if (file_exists($this->destination)) {
@@ -116,16 +116,16 @@
 					}
 				} else {
 					$data = array(
-						'message' 	=> 'There was a problem while uploading',
-						'status' 	=> 'not completed'
+						'message' => 'There was a problem while uploading',
+						'status' => 'not completed'
 					);
 					return $data;
 				}
 				
 			} else {
 				$data = array(
-					'message' 	=> 'Can\'t login to the server ',
-					'status' 	=> 'not completed'
+					'message' => 'Can\'t login to the server ',
+					'status' => 'not completed'
 				);
 				return $data;
 			}
@@ -146,21 +146,21 @@
 			$url = CAMFIND_REQUEST;
 			$imageurl = BASEURL . IMAGEPATH . $imagename;
 			$headers = array(
-								"X-Mashape-Key 	: " .API_KEY ." ",
-								"Content-Type 	: application/x-www-form-urlencoded",
-								"Accept 		: application/json"
-							);
+				"X-Mashape-Key : " .API_KEY ." ",
+				"Content-Type : application/x-www-form-urlencoded",
+				"Accept	: application/json"
+			);
 			
 			$fields = array(
-								"focus[x]" 							=> "480",
-								"focus[y]"							=> "640",
-								"image_request[altitude]" 			=> "27.912109375",
-								"image_request[language]" 			=> "en",
-								"image_request[latitude]" 			=> "35.8714220766008",
-								"image_request[locale]" 			=> "en_US",
-								"image_request[longitude]" 			=> "14.3583203002251",
-								"image_request[remote_image_url]" 	=> $imageurl
-							);
+				"focus[x]" => "480",
+				"focus[y]" => "640",
+				"image_request[altitude]" => "27.912109375",
+				"image_request[language]" => "en",
+				"image_request[latitude]" => "35.8714220766008",
+				"image_request[locale]" => "en_US",
+				"image_request[longitude]" => "14.3583203002251",
+				"image_request[remote_image_url]" => $imageurl
+			);
 						
 			//url-ify the data for the POST
 			$fields_string = "";
@@ -199,8 +199,8 @@
 				return $this->camfindresponse($result);
 			} else {
 				$data = array(
-					'message' 	=> 'Token not found.. Please try again !',
-					'status' 	=> 'not completed',
+					'message' => 'Token not found.. Please try again !',
+					'status' => 'not completed',
 					'imagename' => $imagename
 				);
 				return json_encode($data);
