@@ -19,7 +19,10 @@
 *========================
 */
 
+// Base URL
 define('BASEURL', 'http://raveteam.net/camfind/');
+
+// Image Folder Name
 define('IMAGEPATH', 'images/');
 
 
