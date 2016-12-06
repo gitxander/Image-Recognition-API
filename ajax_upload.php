@@ -77,20 +77,34 @@
 		*  =======================
 		*/
 		public function __construct()
-		{
+		{	
+			$data = [];
 			if (isset($_FILES['file']['type'])) {
 				// File Information
 				$this->filename = $_FILES['file']['name'];
 				$this->source = $_FILES['file']['tmp_name'];
 				$this->destination = IMAGEPATH . $this->filename;
 
-				// FTP Information
-				$this->ftp_server = FTP_SERVER;
-				$this->ftp_username = FTP_USER;
-				$this->ftp_password = FTP_PASS;
+				if (file_exists($this->source)) {
+					$imagesizedata = getimagesize($this->source);
+					if ($imagesizedata === FALSE) {
+							$data['message'] = 'File not supported';
+							$data['status'] = 'failed';
+						return $data;
+					} else {
+						// FTP Information
+						$this->ftp_server = FTP_SERVER;
+						$this->ftp_username = FTP_USER;
+						$this->ftp_password = FTP_PASS;
 
-				// Start Connection
-				return $this->ftp_con();
+						// Start Connection
+						return $this->ftp_con();
+					}
+				} else {
+					$data['message'] = 'File not found';
+					$data['status'] = 'failed';
+					return $data;
+				}
 			}
 		}
 
@@ -101,32 +115,30 @@
 		*/
 		private function ftp_con()
 		{
+			$data = [];
 			$this->conn_id = ftp_connect($this->ftp_server) or die("Couldn\'t connect to $this->ftp_server");
 
 			if (ftp_login($this->conn_id, $this->ftp_username, $this->ftp_password)) {
 				
 				if (ftp_put($this->conn_id, $this->destination, $this->source, FTP_BINARY)) {
-					$data = array(
-						'message' => 'Successfully uploaded',
-						'status' => 'completed'
-					);
 
 					if (file_exists($this->destination)) {
 						return $this->camfindconfig($this->filename);
+					} else {
+						$data['message'] = 'Faild to upload file';
+						$data['status'] = 'not completed';
+						return $data;
 					}
+
 				} else {
-					$data = array(
-						'message' => 'There was a problem while uploading',
-						'status' => 'not completed'
-					);
+					$data['message'] = 'There was a problem while uploading';
+					$data['status'] = 'not completed';
 					return $data;
 				}
 				
 			} else {
-				$data = array(
-					'message' => 'Can\'t login to the server ',
-					'status' => 'not completed'
-				);
+				$data['message'] = 'Can\'t login to the server';
+				$data['status'] = 'not completed';
 				return $data;
 			}
 
